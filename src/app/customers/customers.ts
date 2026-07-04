@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http"
 import { CommonModule } from '@angular/common';
+import { CustomerService   } from '../services/customer-service';
 
 @Component({
   selector: 'app-customers',
@@ -10,14 +10,19 @@ import { CommonModule } from '@angular/common';
 })
 export class Customers implements OnInit {
 
-  customers : any ;
+  customers: any;
+  errorMessage: String|undefined 
 
-  constructor(private http:HttpClient){}
+  constructor(private customerService: CustomerService) { }
+  
   ngOnInit():void {
-    this.http.get("http://localhost:9090/customers").subscribe(data=>{
-       this.customers = data ;
-      }, error => {
-        console.log("error")})
+    this.customerService.getCustomer().subscribe({
+      next : (data:any)=>{
+        this.customers =data
+        },
+      error : (err:any)=>{
+        console.log("err")
+        }
+      });
     }
-
   }
