@@ -17,4 +17,11 @@ export class CustomerService {
      console.log("URL" + this.config.bankendHost+"/customers/search?keyword="+keyword)
     return this.http.get<Array<Customer>>(this.config.bankendHost+"/customers/search?keyword="+keyword); 
   }
+  public saveCustomer(customer:Customer): Observable<Customer> { 
+    return this.http.post<Customer>(this.config.bankendHost+"/customers", customer); 
+  }
+  
+   public deleteCustomer(id:number) { 
+    return this.http.delete(this.config.bankendHost+"/customers/"+id); 
+  }
 }
