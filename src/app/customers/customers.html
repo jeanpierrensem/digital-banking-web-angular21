@@ -1,21 +1,58 @@
 <div class="container mt-2">
-   <div class="card" *ngIf="customers">
-     <div class="card-header"> Customers</div>
-     <div class="card-body">
-       <table class="table">
+  <!-- LOADING -->
+  @if (loading) {
+    <div class="text-center">Loading...</div>
+  }
+
+  <!--Traitement du scénario reussi-->
+  @if (customers$ | async; as customers) {
+    <div class="card">
+      <div class="card-header">Customers</div>
+
+      <div class="card-body">
+        <!--search Form-->
+        @if (searchFormGroup) {
+          <!--{{ this.searchFormGroup.value | json }}-->
+          <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearhCustomer()">
+            <div class="input-group">
+              <label class="input-group-text">keyword</label>
+              <input type="text" formControlName="keyword" class="form-control" />
+              <button class="btn btn-info">Search</button>
+            </div>
+          </form>
+        }
+        <table class="table">
           <thead>
-           <tr>
-             <th>ID</th>   <th>Name</th>   <th>Email</th>
-           </tr>
-          </thead>
-         <tbody>
-            <tr *ngFor="let c of customers ">
-              <td>{{c.id}}</td>
-              <td>{{c.name}}</td>
-              <td>{{c.email}}</td>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
             </tr>
-         </tbody>
-       </table>
-     </div>
-   </div>
+          </thead>
+          <tbody>
+            @for (c of customers; track $index) {
+              <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.email }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+  <!-- si erreur = success, failure-->
+  @else {
+    <ng-template #failure>
+      @if (errorMessage) {
+        <ng-container>
+          <div class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+        </ng-container>
+      }
+    </ng-template>
+    <ng-container *ngTemplateOutlet="failure"></ng-container>
+  }
 </div>

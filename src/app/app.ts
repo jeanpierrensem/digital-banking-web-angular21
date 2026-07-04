@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './navbar/navbar';
+import { InjectionToken } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,5 @@ import { Navbar } from './navbar/navbar';
 })
 export class App {
   protected readonly title = signal('digital-banking-web');
+  
 }
