@@ -1,4 +1,4 @@
-# DigitalBankingWeb
+# Partie 2 :  Angular Client -   DigitalBanking Web
 
 
 <img src="captures/1.png" />
