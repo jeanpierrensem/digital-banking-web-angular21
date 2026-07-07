@@ -1,1 +1,134 @@
-<p>accounts works!</p>
+<div class="container mt-2">
+  <div class="row">
+    <div class="col col-md-7">
+      <div class="card">
+        <div class="card-header">Account</div>
+        <div class="card-body">
+          <form [formGroup]="accountFormGroup" (ngSubmit)="handleAccountSearch()">
+            <div class="input-group mb-3">
+              <label class="input-group-text">Account Id:</label>
+              <input type="text" class="form-control" formControlName="accountId" />
+              <button class="btn btn-info" type="submit">
+                <i class="bi bi-search">Search</i>
+              </button>
+            </div>
+          </form>
+          <ng-container>
+            @if (accountObservable | async; as accountDetails) {
+              <div class="mb-2">
+                <label> Accout ID : </label>
+                <label
+                  ><strong> {{ accountDetails.accountId }} </strong></label
+                >
+              </div>
+              <div class="mb-3">
+                <label> Accout Balance : </label>
+                <label
+                  ><strong> {{ accountDetails.balance | number: '1.2-2' }} </strong></label
+                >
+              </div>
+              <table class="table table-striped table-hover table-bordered">
+                <thead>
+                  <th>ID</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                </thead>
+                <tbody>
+                  @for (op of accountDetails.accountOperationDTO; track $index) {
+                    <tr>
+                      <td class="text-center">{{ op.id }}</td>
+                      <td>{{ op.date | date: 'dd-MM-yyyy' }}</td>
+                      <td>{{ op.type }}</td>
+                      <td class="text-end">{{ op.amount | number: '1.2-2' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <ul class="nav nav-pills">
+                @if (accountObservable | async; as accountDetails) {
+                  @for (page of getPages(accountDetails.totalPages); track page) {
+                    <li>
+                      <a
+                        [ngClass]="page == currentPage ? 'btn-info' : 'btn-outline-info'"
+                        class="btn ms-1 mt-1"
+                        (click)="gotoPage(page)"
+                      >
+                        {{ page }}
+                      </a>
+                    </li>
+                  }
+                }
+              </ul>
+            }
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col col-md-5">
+      <!-- form Operation-->
+
+      @if (authService.hasRole('ROLE_ADMIN')) {
+        @if (accountObservable) {
+          <div class="card">
+            <div class="card-header">Operation</div>
+            <div class="card-body">
+              <form [formGroup]="operationFormGroup" (ngSubmit)="handleOperation()" method="post">
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    formControlName="operationType"
+                    value="DEBIT"
+                  />
+                  <label class="form-check-label" for="debit"> DEBIT </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    formControlName="operationType"
+                    value="CREDIT"
+                  />
+                  <label class="form-check-label" for="credit"> CREDIT </label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    formControlName="operationType"
+                    value="TRANSFER"
+                  />
+                  <label class="form-check-label" for="transfer"> TRANSFER </label>
+                </div>
+
+                <!-- display only if transfer-->
+                @if (operationFormGroup.value.operationType == 'TRANSFER') {
+                  <div class="mb-3">
+                    <label class="form-label">Account Destination</label>
+                    <input type="text" formControlName="accountDestination" class="form-control" />
+                  </div>
+                }
+
+                <!---->
+
+                <div class="mb-3">
+                  <label class="form-label">Amount</label>
+                  <input type="text" formControlName="amount" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Description</label>
+                  <input type="text" formControlName="description" class="form-control" />
+                </div>
+                <div class="d-grid">
+                  <button class="btn btn-success">Save Operation</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>

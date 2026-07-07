@@ -16,7 +16,7 @@ export class Customers implements OnInit {
   customers$!: Observable<Array<Customer>>;
   errorMessage!: String 
   loading = true; 
-  searchFormGroup : FormGroup | undefined; 
+  searchFormGroup: FormGroup | undefined; 
 
   constructor(private customerService: CustomerService, private fb : FormBuilder) { }
   
@@ -25,7 +25,6 @@ export class Customers implements OnInit {
     this.searchFormGroup = this.fb.group({
         keyword: this.fb.control("")
     }) 
-
     this.handleSearhCustomer(); 
   }
   

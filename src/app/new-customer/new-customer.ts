@@ -34,8 +34,8 @@ export class NewCustomer implements OnInit{
     this.customerService.saveCustomer(customer).subscribe({
       next: (data) => {
         alert("customer has been successfuly saved")
-        //this.newCustomerFormGroup.reset()
-        this.router.navigateByUrl("/customers")
+        this.newCustomerFormGroup.reset()
+        this.router.navigateByUrl("/admin/customers")
       }, 
       error: (err) => {
         console.log(err)
